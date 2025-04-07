@@ -1,0 +1,23 @@
+/* Reset and clear default styles */
+.problem-statement {
+    margin: 0.5em;
+    line-height: 1.5em;
+}
+
+.problem-statement p {
+    margin: 0 0 1em 0;
+}
+
+.problem-statement .header {
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+.problem-statement li {
+    margin-bottom: 0.5em;
+}
+
+.problem-statement ol, .problem-statement ul {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}

@@ -1,0 +1,180 @@
+@charset "utf-8";
+
+/* style the PDF file */
+@page {
+	size: A4;
+	margin: 20px 10px 30px 10px;
+
+	@bottom-right {
+		content: "Page "counter(page)" of "counter(pages);
+		margin-bottom: 10px;
+	}
+}
+
+/* print each problem in separate page when extracting contest */
+.problemindexholder {
+	break-inside: avoid-page;
+}
+
+/* centralize images */
+.tex-graphics {
+    margin: 10px auto !important;
+}
+
+/* hide copy button */
+.input-output-copier {
+	display:none
+}
+
+/* Core Codeforces Styling */
+.problem-statement {
+	margin: 0.5em;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: 1.5em;
+	font-size: 1.4rem;
+}
+
+.problem-statement .header {
+	margin-bottom: 1em;
+	text-align: left;
+}
+
+.problem-statement .header .title {
+	font-size: 150%;
+	font-weight: bold;
+	margin-bottom: 0.5em;
+}
+
+.problem-statement .header .title {
+	font-size: 150%;
+	font-weight: bold;
+	margin-bottom: 0.5em;
+}
+
+.problem-statement .time-limit, 
+.problem-statement .memory-limit,
+.problem-statement .input-file,
+.problem-statement .output-file {
+	margin: 0.2em 0;
+}
+
+.problem-statement .time-limit::before,
+.problem-statement .memory-limit::before,
+.problem-statement .input-file::before,
+.problem-statement .output-file::before {
+	font-weight: bold;
+}
+
+.problem-statement .section-title {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 115%;
+	font-weight: bold;
+	margin: 1.5em 0 0.75em 0;
+}
+
+.problem-statement p {
+	margin: 0 0 1em 0;
+	text-align: justify;
+}
+
+.problem-statement .sample-test {
+	margin: 1em 0;
+}
+
+.problem-statement .sample-test .input,
+.problem-statement .sample-test .output {
+	border: 1px solid #888;
+	margin: 0.5em 0;
+	padding: 0.5em;
+}
+
+.problem-statement .sample-test .title {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 1.1em;
+	padding: 0.25em;
+	background-color: #f0f0f0;
+	border-bottom: 1px solid #888;
+	margin-bottom: 0.5em;
+	font-weight: bold;
+}
+
+.problem-statement pre {
+	font-family: Consolas, "Lucida Console", "Andale Mono", "Bitstream Vera Sans Mono", "Courier New", Courier;
+	font-size: 0.9em;
+	line-height: 1.25em;
+	margin: 0;
+	padding: 0;
+	background-color: #f8f8f8;
+}
+
+.problem-statement .math-tex {
+	font-family: "Times New Roman", serif;
+	font-size: 1.1em;
+	text-align: center;
+	margin: 0.5em 0;
+}
+
+.problem-statement .math-inline {
+	font-family: "Times New Roman", serif;
+	font-style: italic;
+}
+
+.problem-statement ul {
+	list-style-type: disc;
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+	padding-left: 2em;
+}
+
+.problem-statement ol {
+	list-style-type: decimal;
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+	padding-left: 2em;
+}
+
+.problem-statement li {
+	margin-bottom: 0.5em;
+}
+
+/* MathJax formatting */
+.MathJax {
+	color: black !important;
+}
+
+/* Custom formatting for math */
+.math-display, .math-container {
+	font-family: "Times New Roman", serif;
+	font-style: italic;
+	font-size: 1.1em;
+	text-align: center;
+	margin: 0.75em 0;
+	padding: 0.25em 0;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+}
+
+.math-inline {
+	font-family: "Times New Roman", serif;
+	font-style: italic;
+}
+
+.fraction {
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+	margin: 0 0.2em;
+}
+
+.numerator, .denominator {
+	display: block;
+}
+
+.numerator {
+	border-bottom: 1px solid #000;
+	padding: 0 0.2em;
+}
+
+.denominator {
+	padding: 0 0.2em;
+}

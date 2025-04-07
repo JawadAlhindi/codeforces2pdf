@@ -1,0 +1,69 @@
+/* General styling */
+.problem-statement {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1em;
+    color: #333;
+    background-color: #fff;
+}
+
+/* Formula display */
+.formula {
+    text-align: center;
+    margin: 1em 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.mjx-chtml {
+    display: inline-block;
+    line-height: 0;
+    text-indent: 0;
+    text-align: left;
+    text-transform: none;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 100%;
+    font-size-adjust: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    direction: ltr;
+}
+
+.mjx-math {
+    display: inline-block;
+}
+
+/* Special elements */
+.tex-graphics img,
+.tex-formula img {
+    margin: 0.5em auto;
+    display: block;
+}
+
+.input-specification,
+.output-specification {
+    margin-bottom: 1.5em;
+}
+
+.problem-statement ol,
+.problem-statement ul {
+    padding-left: 2em;
+}
+
+.problem-statement li {
+    margin-bottom: 0.5em;
+}
+
+/* Ensure images are properly sized */
+.problem-statement img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Special content sections */
+.problem-statement .note {
+    background-color: #f8f9fa;
+    padding: 0.5em;
+    border-left: 4px solid #ccc;
+    margin: 1em 0;
+}

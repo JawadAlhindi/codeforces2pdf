@@ -1,0 +1,26 @@
+/* Cuprum font styles */
+@font-face {
+    font-family: 'Cuprum';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/cuprum/v20/dg4k_pLmvrkcOkBNK-tCt70.woff2) format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Cuprum';
+    font-style: normal;
+    font-weight: 700;
+    src: url(https://fonts.gstatic.com/s/cuprum/v20/dg4n_pLmvrkcOkBFnc5XhcJr.woff2) format('woff2');
+    font-display: swap;
+}
+
+.problem-statement h1, 
+.problem-statement h2, 
+.problem-statement h3, 
+.problem-statement h4, 
+.problem-statement h5, 
+.problem-statement .header .title {
+    font-family: 'Cuprum', sans-serif;
+    font-weight: 700;
+}

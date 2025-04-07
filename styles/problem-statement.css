@@ -1,0 +1,230 @@
+.problem-statement {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: black;
+    background-color: white;
+    margin: 0;
+    padding: 20px;
+}
+
+.problem-statement .header {
+    margin-bottom: 1.5em;
+    border-bottom: 1px solid #e1e4e8;
+    padding-bottom: 1em;
+}
+
+.problem-statement .header .title {
+    font-size: 150%;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    color: #1a5cc8;
+}
+
+.problem-statement .header .time-limit, 
+.problem-statement .header .memory-limit,
+.problem-statement .header .input-file, 
+.problem-statement .header .output-file {
+    margin-bottom: 0.3em;
+    color: #333;
+}
+
+.problem-statement .header .time-limit, 
+.problem-statement .header .memory-limit {
+    font-weight: bold;
+}
+
+.problem-statement .section-title {
+    font-size: 115%;
+    font-weight: bold;
+    margin: 1.5em 0 0.75em 0;
+    color: #1a5cc8;
+}
+
+.problem-statement p {
+    margin: 0 0 0.75em 0;
+}
+
+.problem-statement .input, .problem-statement .output {
+    font-family: "Courier New", Courier, monospace;
+    border: 1px solid #ccc;
+    background-color: #f6f8fa;
+    padding: 0.7em;
+    margin-bottom: 1em;
+    white-space: pre;
+    line-height: 1.3;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.problem-statement pre {
+    font-family: "Courier New", Courier, monospace;
+    background-color: #f6f8fa;
+    border: 1px solid #ccc;
+    padding: 0.7em;
+    border-radius: 3px;
+    overflow-x: auto;
+    font-size: 0.9em;
+    line-height: 1.3;
+}
+
+.problem-statement code {
+    font-family: "Courier New", Courier, monospace;
+    background-color: #f6f8fa;
+    border-radius: 3px;
+    padding: 0.2em 0.4em;
+    font-size: 0.9em;
+}
+
+.problem-statement .sample-tests .input, 
+.problem-statement .sample-tests .output {
+    margin-bottom: 0.5em;
+}
+
+.problem-statement .sample-tests .sample-test {
+    margin-bottom: 1.5em;
+    background-color: #fafafa;
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid #eaecef;
+}
+
+.problem-statement .sample-tests .title {
+    font-weight: bold;
+    color: #1a5cc8;
+    margin-bottom: 0.5em;
+}
+
+.problem-statement .note {
+    background-color: #fffbe5;
+    padding: 0.8em;
+    border-left: 4px solid #ffd33d;
+    margin-bottom: 1em;
+    border-radius: 0 3px 3px 0;
+}
+
+.problem-statement .note .section-title {
+    margin-top: 0;
+}
+
+.problem-statement ul, .problem-statement ol {
+    padding-left: 2em;
+    margin-bottom: 1em;
+}
+
+.problem-statement li {
+    margin-bottom: 0.5em;
+}
+
+.problem-statement table {
+    border-collapse: collapse;
+    margin-bottom: 1em;
+    width: auto;
+}
+
+.problem-statement table td, .problem-statement table th {
+    border: 1px solid #e1e4e8;
+    padding: 0.5em 1em;
+    text-align: center;
+}
+
+.problem-statement table th {
+    background-color: #f6f8fa;
+    font-weight: bold;
+}
+
+.problem-statement img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1em auto;
+}
+
+.problem-statement .math {
+    font-family: "Times New Roman", serif;
+}
+
+.problem-statement .tex-formula {
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+    font-size: 1.1em;
+}
+
+/* Inline math styling */
+.problem-statement .tex-span {
+    font-family: "Times New Roman", serif;
+    font-style: italic;
+}
+
+/* Codeforces specific styling */
+.problem-statement .header .property-title {
+    display: inline-block;
+    width: 4em;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 0.5em;
+}
+
+/* Difficulty badges */
+.difficulty-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin-bottom: 0.5em;
+}
+
+.green {
+    background-color: #3db73d;
+}
+
+.cyan {
+    background-color: #00c0c0;
+}
+
+.blue {
+    background-color: #0000ff;
+}
+
+.violet, .purple {
+    background-color: #aa00aa;
+}
+
+.orange {
+    background-color: #ff8c00;
+}
+
+.red {
+    background-color: #ff0000;
+}
+
+/* Tables in problem statements */
+.problem-statement .MathJax_Display {
+    margin: 0.7em 0;
+}
+
+/* Special formatting for Codeforces problems */
+.problem-statement div[class^="input-specification"],
+.problem-statement div[class^="output-specification"] {
+    margin-bottom: 1.5em;
+}
+
+/* Keep consistent styles for headers */
+.problem-statement h1, .problem-statement h2, .problem-statement h3 {
+    color: #1a5cc8;
+    font-weight: bold;
+    margin: 1.5em 0 0.75em 0;
+}
+
+.problem-statement h1 { font-size: 1.3em; }
+.problem-statement h2 { font-size: 1.2em; }
+.problem-statement h3 { font-size: 1.1em; }
+
+/* Fix for MathJax elements */
+.problem-statement .MathJax {
+    color: black;
+}

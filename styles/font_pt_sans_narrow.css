@@ -1,0 +1,21 @@
+/* PT Sans Narrow font styles */
+@font-face {
+    font-family: 'PT Sans Narrow';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/ptsansnarrow/v17/BngRUXNadjH0qYEzV7ab-oWlsbCGwR2oefDo.woff2) format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'PT Sans Narrow';
+    font-style: normal;
+    font-weight: 700;
+    src: url(https://fonts.gstatic.com/s/ptsansnarrow/v17/BngSUXNadjH0qYEzV7ab-oWlsbg95AiFW_3QRQ.woff2) format('woff2');
+    font-display: swap;
+}
+
+.problem-statement {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 14px;
+}

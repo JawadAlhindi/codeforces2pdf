@@ -1,0 +1,103 @@
+/* Math formulas styling */
+.math-container {
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+    overflow-x: auto;
+}
+
+.math-inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.math-notation {
+    font-style: italic;
+}
+
+/* Variables */
+.math-var {
+    font-style: italic;
+}
+
+/* Subscripts and superscripts */
+.math-sub {
+    vertical-align: sub;
+    font-size: smaller;
+}
+
+.math-sup {
+    vertical-align: super;
+    font-size: smaller;
+}
+
+/* Fractions */
+.fraction {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.fraction .numerator {
+    border-bottom: 1px solid black;
+    display: block;
+    padding: 0 0.2em;
+}
+
+.fraction .denominator {
+    display: block;
+    padding: 0 0.2em;
+}
+
+/* Math symbols */
+.math-symbol {
+    margin: 0 0.1em;
+}
+
+/* Matrices */
+.matrix {
+    display: inline-table;
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin: 0.5em auto;
+}
+
+.matrix-row {
+    display: table-row;
+}
+
+.matrix-cell {
+    display: table-cell;
+    text-align: center;
+    padding: 0.2em 0.5em;
+}
+
+.matrix-brackets {
+    position: relative;
+}
+
+.matrix-brackets:before,
+.matrix-brackets:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 0.3em;
+    border-style: solid;
+}
+
+.matrix-brackets:before {
+    left: 0;
+    border-width: 0.1em 0 0.1em 0.1em;
+    border-color: black;
+    border-top-left-radius: 0.2em;
+    border-bottom-left-radius: 0.2em;
+}
+
+.matrix-brackets:after {
+    right: 0;
+    border-width: 0.1em 0.1em 0.1em 0;
+    border-color: black;
+    border-top-right-radius: 0.2em;
+    border-bottom-right-radius: 0.2em;
+}

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codeforces to PDF Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(to right, #0d6efd, #0a58ca);
+            --card-background: #f8f9fa;
+            --background: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --input-background: #ffffff;
+            --input-border: #ced4da;
+            --button-primary: #0d6efd;
+            --button-primary-hover: #0b5ed7;
+            --button-secondary: #6c757d;
+            --button-secondary-hover: #5c636a;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-bs-theme="dark"] {
+            --primary-gradient: linear-gradient(to right, #0d6efd, #0a58ca);
+            --card-background: #2b3035;
+            --background: #18191a;
+            --text-primary: #ffffff;
+            --text-secondary: #adb5bd;
+            --border-color: #343a40;
+            --input-background: #212529;
+            --input-border: #495057;
+            --button-primary: #0d6efd;
+            --button-primary-hover: #0b5ed7;
+            --button-secondary: #495057;
+            --button-secondary-hover: #343a40;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .hero {
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+            color: #ffffff;
+        }
+        
+        #theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        #theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+        
+        [data-bs-theme="dark"] .card-header {
+            background-color: rgba(13, 110, 253, 0.08);
+        }
+        
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .form-group small {
+            display: block;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            background-color: var(--input-background);
+            border: 2px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--button-primary);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+        }
+        
+        [data-bs-theme="light"] .form-control {
+            border-color: #c8ccd0;
+        }
+        
+        [data-bs-theme="dark"] .form-control {
+            border-color: #484f56;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--button-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover);
+        }
+        
+        .btn-secondary {
+            background-color: var(--button-secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--button-secondary-hover);
+        }
+        
+        .d-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-check-input {
+            margin-right: 0.5rem;
+        }
+        
+        .problem-preview {
+            background-color: rgba(13, 110, 253, 0.05);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(13, 110, 253, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        [data-bs-theme="dark"] .problem-preview {
+            background-color: rgba(13, 110, 253, 0.1);
+            border: 1px solid rgba(13, 110, 253, 0.3);
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+        }
+        
+        .feature-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background-color: rgba(13, 110, 253, 0.1);
+            border-radius: 50%;
+            margin-right: 1rem;
+            color: var(--button-primary);
+            flex-shrink: 0;
+        }
+        
+        .feature-info h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .feature-info p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .instructions {
+            margin-bottom: 1rem;
+        }
+        
+        .badge-samples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        /* Alert styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .alert-success {
+            background-color: rgba(25, 135, 84, 0.1);
+            border: 1px solid rgba(25, 135, 84, 0.2);
+            color: #198754;
+        }
+        
+        .alert-error {
+            background-color: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        [data-bs-theme="dark"] .alert-success {
+            background-color: rgba(25, 135, 84, 0.2);
+            color: #20c997;
+        }
+        
+        [data-bs-theme="dark"] .alert-error {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #f77;
+        }
+        
+        /* Code blocks */
+        code {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 87.5%;
+        }
+        
+        [data-bs-theme="dark"] code {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Codeforces to PDF Converter</h1>
+            <p>Download programming problems from Codeforces in beautifully formatted PDFs</p>
+            <button id="theme-toggle" title="Toggle dark/light mode">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="theme-icon-light" viewBox="0 0 16 16">
+                    <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="theme-icon-dark" viewBox="0 0 16 16" style="display: none;">
+                    <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="grid">
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Convert Problem</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="alert-container">
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                    {% for category, message in messages %}
+                                        <div class="alert alert-{{ 'error' if category == 'error' else 'success' }}" role="alert">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                        
+                        <form id="convert-form" action="{{ url_for('convert') }}" method="POST">
+                            <div class="form-group">
+                                <label for="problem_url">Problem URL <small>(optional)</small></label>
+                                <input type="url" class="form-control" id="problem_url" name="problem_url" 
+                                       placeholder="https://codeforces.com/contest/1234/problem/A">
+                                <small>Paste a Codeforces problem URL to auto-fill fields below</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contest_id">Contest ID</label>
+                                <input type="number" class="form-control" id="contest_id" name="contest_id" 
+                                       placeholder="1903" required>
+                                <small>The numeric ID of the Codeforces contest</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="problem">Problem ID</label>
+                                <input type="text" class="form-control" id="problem" name="problem" 
+                                       placeholder="A" required>
+                                <small>The letter/ID of the problem within the contest</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="true" id="all_problems" name="all_problems">
+                                    <label class="form-check-label" for="all_problems">
+                                        Download all problems from this contest
+                                    </label>
+                                </div>
+                                <small>Will create a ZIP file with all problems from the contest</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="mode">Rendering Mode</label>
+                                <select class="form-control" id="mode" name="mode">
+                                    <option value="default" selected>Default (Balanced quality and speed)</option>
+                                    <option value="fast">Fast (Faster but potentially less accurate)</option>
+                                    <option value="graphics">Graphics (High-quality SVG graphics)</option>
+                                </select>
+                                <small>Select rendering mode for LaTeX formulas</small>
+                            </div>
+                            
+                            <div id="problem-preview" class="problem-preview" style="display: none;">
+                                <h3 style="margin-top: 0; margin-bottom: 1rem; font-size: 1.25rem; font-weight: 600;">Problem Preview</h3>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                    <span style="font-weight: 600;" id="preview-contest-problem"></span>
+                                    <span id="difficulty-badge" class="difficulty-badge"></span>
+                                </div>
+                                <div style="margin-bottom: 0.75rem; font-weight: 500;" id="preview-title"></div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;" id="preview-limits"></div>
+                                <div class="preview-message" style="color: #198754; margin-bottom: 0.75rem;"></div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="button" id="preview-button" class="btn btn-secondary">Preview Problem</button>
+                                <button type="submit" id="generate-button" class="btn btn-primary" style="display: none;">Generate PDF</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Instructions</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="instructions">
+                            <p>To use this tool:</p>
+                            <ol>
+                                <li>Paste a Codeforces problem URL, <strong>or</strong></li>
+                                <li>Enter the <strong>Contest ID</strong> and <strong>Problem ID</strong> manually</li>
+                                <li>Click "Preview Problem" to verify details</li>
+                                <li>Click "Generate PDF" to download</li>
+                            </ol>
+                            <p style="margin-top: 0.75rem;">Example: For problem at <code>codeforces.com/contest/1903/problem/A</code>, use Contest ID: <code>1903</code> and Problem ID: <code>A</code></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Features</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <div class="feature-info">
+                                    <h4>LaTeX Formula Support</h4>
+                                    <p>Mathematical formulas rendered with precision</p>
+                                </div>
+                            </li>
+                            <li class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <div class="feature-info">
+                                    <h4>Codeforces Formatting</h4>
+                                    <p>Preserves the original problem styling</p>
+                                </div>
+                            </li>
+                            <li class="feature-item">
+                                <div class="feature-icon">✓</div>
+                                <div class="feature-info">
+                                    <h4>Difficulty Badges</h4>
+                                    <p>Color-coded badges show problem rating</p>
+                                    <div class="badge-samples">
+                                        <span style="background-color: #3db73d;" class="difficulty-badge">800</span>
+                                        <span style="background-color: #00c0c0;" class="difficulty-badge">1300</span>
+                                        <span style="background-color: #0000ff;" class="difficulty-badge">1500</span>
+                                        <span style="background-color: #aa00aa;" class="difficulty-badge">1800</span>
+                                        <span style="background-color: #ff8c00;" class="difficulty-badge">2000</span>
+                                        <span style="background-color: #ff0000;" class="difficulty-badge">2200</span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>This is an unofficial tool and not affiliated with Codeforces</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const problemUrlField = document.getElementById('problem_url');
+            const contestIdField = document.getElementById('contest_id');
+            const problemField = document.getElementById('problem');
+            const allProblemsCheckbox = document.getElementById('all_problems');
+            const previewButton = document.getElementById('preview-button');
+            const generateButton = document.getElementById('generate-button');
+            const problemPreview = document.getElementById('problem-preview');
+            const previewContestProblem = document.getElementById('preview-contest-problem');
+            const previewTitle = document.getElementById('preview-title');
+            const previewLimits = document.getElementById('preview-limits');
+            const difficultyBadge = document.getElementById('difficulty-badge');
+            const previewMessage = document.querySelector('.preview-message');
+            const themeToggle = document.getElementById('theme-toggle');
+            const lightIcon = document.querySelector('.theme-icon-light');
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            const alertContainer = document.getElementById('alert-container');
+            
+            console.log("Scripts loaded");
+            console.log("Preview button:", previewButton);
+            
+            // Clear alerts after a download
+            const convertForm = document.getElementById('convert-form');
+            convertForm.addEventListener('submit', function() {
+                // Set a flag in localStorage to indicate we're submitting the form
+                localStorage.setItem('formSubmitted', 'true');
+            });
+            
+            // Check if we should hide alerts (when returning after PDF generation)
+            if (localStorage.getItem('formSubmitted') === 'true') {
+                // Clear the flag
+                localStorage.removeItem('formSubmitted');
+                
+                // Add a small delay to allow the page to fully load first
+                setTimeout(function() {
+                    alertContainer.innerHTML = '';
+                }, 1000);
+            }
+            
+            // Theme toggle
+            themeToggle.addEventListener('click', function() {
+                const html = document.documentElement;
+                if (html.getAttribute('data-bs-theme') === 'dark') {
+                    html.setAttribute('data-bs-theme', 'light');
+                    lightIcon.style.display = 'block';
+                    darkIcon.style.display = 'none';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    html.setAttribute('data-bs-theme', 'dark');
+                    lightIcon.style.display = 'none';
+                    darkIcon.style.display = 'block';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+            
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-bs-theme', savedTheme);
+                if (savedTheme === 'dark') {
+                    lightIcon.style.display = 'none';
+                    darkIcon.style.display = 'block';
+                }
+            }
+            
+            // Parse problem URL to fill contest ID and problem ID
+            problemUrlField.addEventListener('input', function() {
+                const url = this.value.trim();
+                if (!url) return;
+                
+                // Parse Codeforces URLs
+                // Examples:
+                // https://codeforces.com/contest/1234/problem/A
+                // https://codeforces.com/problemset/problem/1234/A
+                // https://codeforces.com/gym/1234/problem/A
+                
+                const regexPatterns = [
+                    /codeforces\.com\/contest\/(\d+)\/problem\/([A-Za-z0-9]+)/,
+                    /codeforces\.com\/problemset\/problem\/(\d+)\/([A-Za-z0-9]+)/,
+                    /codeforces\.com\/gym\/(\d+)\/problem\/([A-Za-z0-9]+)/
+                ];
+                
+                for (const pattern of regexPatterns) {
+                    const match = url.match(pattern);
+                    if (match) {
+                        contestIdField.value = match[1];
+                        problemField.value = match[2];
+                        
+                        // Auto-trigger the preview
+                        setTimeout(() => {
+                            previewButton.click();
+                        }, 500);
+                        
+                        break;
+                    }
+                }
+            });
+            
+            // Additional handler for when URL is pasted and form is submitted directly
+            convertForm.addEventListener('submit', function(e) {
+                if (problemUrlField.value.trim() && (!contestIdField.value || !problemField.value)) {
+                    e.preventDefault();
+                    
+                    // Try to parse the URL here as well for immediate action
+                    const url = problemUrlField.value.trim();
+                    const regexPatterns = [
+                        /codeforces\.com\/contest\/(\d+)\/problem\/([A-Za-z0-9]+)/,
+                        /codeforces\.com\/problemset\/problem\/(\d+)\/([A-Za-z0-9]+)/,
+                        /codeforces\.com\/gym\/(\d+)\/problem\/([A-Za-z0-9]+)/
+                    ];
+                    
+                    let matched = false;
+                    for (const pattern of regexPatterns) {
+                        const match = url.match(pattern);
+                        if (match) {
+                            contestIdField.value = match[1];
+                            problemField.value = match[2];
+                            matched = true;
+                            
+                            // Trigger preview immediately, then submit the form after preview completes
+                            previewButton.click();
+                            
+                            // After a short delay to let preview load, simulate a click on generate button
+                            setTimeout(() => {
+                                generateButton.click();
+                            }, 1500);
+                            
+                            break;
+                        }
+                    }
+                    
+                    if (!matched) {
+                        alert('Could not parse Codeforces URL. Please enter Contest ID and Problem ID manually.');
+                    }
+                }
+            });
+            
+            // Toggle problem field based on "all problems" checkbox
+            allProblemsCheckbox.addEventListener('change', function() {
+                problemField.disabled = this.checked;
+                if (this.checked) {
+                    problemField.value = '';
+                }
+            });
+            
+            // Preview button handler
+            previewButton.addEventListener('click', function() {
+                const contestId = contestIdField.value.trim();
+                const problem = problemField.value.trim();
+                const allProblems = allProblemsCheckbox.checked;
+                
+                if (!contestId) {
+                    alert('Please enter a Contest ID');
+                    return;
+                }
+                
+                if (!allProblems && !problem) {
+                    alert('Please enter a Problem ID or select "Download all problems"');
+                    return;
+                }
+                
+                if (allProblems) {
+                    // For "all problems" mode, just show a simple preview
+                    problemPreview.style.display = 'block';
+                    previewContestProblem.textContent = `Contest ${contestId}`;
+                    previewTitle.textContent = 'All Problems';
+                    previewLimits.textContent = '';
+                    difficultyBadge.style.display = 'none';
+                    previewMessage.textContent = 'Ready to download all problems from this contest';
+                    generateButton.style.display = 'block';
+                    return;
+                }
+                
+                // Show loading state
+                problemPreview.style.display = 'block';
+                previewContestProblem.textContent = `Problem ${contestId}${problem}`;
+                previewTitle.textContent = 'Loading...';
+                previewLimits.textContent = '';
+                difficultyBadge.style.display = 'none';
+                previewMessage.textContent = 'Checking problem availability...';
+                
+                // Make API request to check problem
+                fetch('/check-availability', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contest_id: contestId,
+                        problem: problem
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show problem details
+                        previewContestProblem.textContent = `Problem ${contestId}${problem}`;
+                        previewTitle.textContent = data.title;
+                        previewLimits.textContent = `Time limit: ${data.time_limit} | Memory limit: ${data.memory_limit}`;
+                        
+                        // Show difficulty badge if available
+                        if (data.rating > 0) {
+                            difficultyBadge.textContent = data.rating;
+                            difficultyBadge.style.backgroundColor = getDifficultyColor(data.rating);
+                            difficultyBadge.style.display = 'inline-block';
+                        } else {
+                            difficultyBadge.style.display = 'none';
+                        }
+                        
+                        previewMessage.textContent = 'Problem found! Ready to generate PDF.';
+                        previewMessage.style.color = '#198754';
+                        generateButton.style.display = 'block';
+                    } else {
+                        // Show error
+                        previewTitle.textContent = 'Problem Not Found';
+                        previewLimits.textContent = '';
+                        difficultyBadge.style.display = 'none';
+                        previewMessage.textContent = data.message || 'Unable to access this problem on Codeforces.';
+                        previewMessage.style.color = '#dc3545';
+                        generateButton.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    previewTitle.textContent = 'Error';
+                    previewLimits.textContent = '';
+                    difficultyBadge.style.display = 'none';
+                    previewMessage.textContent = 'An error occurred while checking problem availability.';
+                    previewMessage.style.color = '#dc3545';
+                    generateButton.style.display = 'none';
+                });
+            });
+            
+            // Function to get color based on difficulty rating
+            function getDifficultyColor(rating) {
+                if (rating < 1200) return '#3db73d'; // green
+                if (rating < 1400) return '#00c0c0'; // cyan
+                if (rating < 1600) return '#0000ff'; // blue
+                if (rating < 1900) return '#aa00aa'; // purple
+                if (rating < 2100) return '#ff8c00'; // orange
+                return '#ff0000'; // red
+            }
+        });
+    </script>
+</body>
+</html>
