@@ -128,7 +128,3 @@ This project is available under the MIT License, allowing for both personal and 
 
 - Original concept inspired by [AliOsm/codeforces2pdf](https://github.com/AliOsm/codeforces2pdf)
 - Built with appreciation for the competitive programming community and Codeforces platform
-
----
-
-*Developed with care for the competitive programming community*
