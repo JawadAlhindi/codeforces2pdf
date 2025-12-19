@@ -375,32 +375,57 @@ def generate_latex_formulas_embeds_fast(
 
 
 def render_formulas(html: str, mode: Mode) -> Tuple[bool, str]:
-    # Simplified implementation as requested - just apply basic handling
+    """
+    Process mathematical formulas in the HTML content.
+    Applies simple CSS-based formatting for common math notation.
+    """
+    # Apply simple math notation handling for common patterns
+    html = handle_simple_math_notation(html)
+
+    # Wrap LaTeX-style delimiters with appropriate classes
+    # Handle $...$ inline math
+    html = re.sub(r'\$([^\$]+)\$', r'<span class="math-inline">\1</span>', html)
+
+    # Handle $$...$$ display math
+    html = re.sub(r'\$\$([^\$]+)\$\$', r'<div class="math-display">\1</div>', html)
+
     return True, html
 
 
 def handle_simple_math_notation(html: str) -> str:
     """
-    Apply simple CSS-based formatting for math notation when LaTeX rendering fails
+    Apply simple CSS-based formatting for math notation when LaTeX rendering fails.
+    Processes common mathematical expressions to make them more readable.
     """
-    # Handle subscripts: replace a_n with a<sub>n</sub>
-    html = re.sub(r'([a-zA-Z])_([a-zA-Z0-9])', r'\1<sub>\2</sub>', html)
-    
+    # Handle subscripts: replace a_n with a<sub>n</sub> (but avoid in URLs and code)
+    html = re.sub(r'(?<![\w/=])([a-zA-Z])_([a-zA-Z0-9]+)(?!["\'])', r'\1<sub>\2</sub>', html)
+
     # Handle superscripts: replace a^n with a<sup>n</sup>
-    html = re.sub(r'([a-zA-Z0-9])\^([a-zA-Z0-9])', r'\1<sup>\2</sup>', html)
-    
+    html = re.sub(r'(?<![\w/=])([a-zA-Z0-9])\^([a-zA-Z0-9]+)(?!["\'])', r'\1<sup>\2</sup>', html)
+
     # Handle square roots: replace \sqrt{...} with a styled span
-    html = re.sub(r'\\sqrt\{([^}]+)\}', r'<span class="math-notation">√\1</span>', html)
-    
-    # Handle simple fractions: replace \frac{a}{b} with styled divs
+    html = re.sub(r'\\sqrt\{([^}]+)\}', r'<span class="math-notation">√(\1)</span>', html)
+
+    # Handle simple fractions: replace \frac{a}{b} with styled spans
     html = re.sub(
         r'\\frac\{([^}]+)\}\{([^}]+)\}',
-        r'<div class="fraction"><span class="numerator">\1</span><span class="denominator">\2</span></div>',
+        r'<span class="fraction">(<span class="numerator">\1</span>/<span class="denominator">\2</span>)</span>',
         html
     )
-    
-    # Add more math notation handling as needed
-    
+
+    # Handle common math symbols
+    html = html.replace(r'\le', '≤')
+    html = html.replace(r'\ge', '≥')
+    html = html.replace(r'\ne', '≠')
+    html = html.replace(r'\times', '×')
+    html = html.replace(r'\div', '÷')
+    html = html.replace(r'\pm', '±')
+    html = html.replace(r'\infty', '∞')
+    html = html.replace(r'\sum', '∑')
+    html = html.replace(r'\prod', '∏')
+    html = html.replace(r'\leq', '≤')
+    html = html.replace(r'\geq', '≥')
+
     return html
 
 
@@ -477,15 +502,18 @@ def build_pdf_from_html(html: str, output_dir: str, file_name: str, mode: Mode, 
     sample_inputs = bs.find_all('div', class_='input')
     sample_outputs = bs.find_all('div', class_='output')
 
-    for i, (input_div, output_div) in enumerate(zip(sample_inputs, sample_outputs)):
-        # Clean up the input/output content
-        input_content = input_div.find('pre').text if input_div.find('pre') else ""
-        output_content = output_div.find('pre').text if output_div.find('pre') else ""
+    # Group all examples under one "Examples" section
+    if sample_inputs and sample_outputs:
+        # Build all examples HTML
+        examples_html = '<div class="sample-test"><div class="section-title">Examples</div>'
 
-        # Create compact samples section like in 4A
-        formatted_sample = f"""
-        <div class="sample-test">
-            <div class="section-title">Examples</div>
+        for i, (input_div, output_div) in enumerate(zip(sample_inputs, sample_outputs)):
+            # Clean up the input/output content
+            input_content = input_div.find('pre').text if input_div.find('pre') else ""
+            output_content = output_div.find('pre').text if output_div.find('pre') else ""
+
+            # Add each example to the collection
+            examples_html += f"""
             <div class="example">
                 <div class="input">
                     <div class="title">input</div>
@@ -496,15 +524,46 @@ def build_pdf_from_html(html: str, output_dir: str, file_name: str, mode: Mode, 
                     <pre>{output_content.strip()}</pre>
                 </div>
             </div>
-        </div>
-        """
+            """
 
-        # Replace with new format
-        new_sample = bs4.BeautifulSoup(formatted_sample, "html.parser")
-        input_div.replace_with(new_sample)
+        examples_html += '</div>'
 
-        # Remove the original output div
-        output_div.extract()
+        # Replace the first input div with all examples
+        new_sample = bs4.BeautifulSoup(examples_html, "html.parser")
+        sample_inputs[0].replace_with(new_sample)
+
+        # Remove all remaining input and output divs
+        for i in range(1, len(sample_inputs)):
+            sample_inputs[i].extract()
+        for output_div in sample_outputs:
+            output_div.extract()
+
+    # Handle Input/Output specification sections
+    input_spec_divs = bs.find_all('div', class_='input-specification')
+    for input_spec_div in input_spec_divs:
+        content = input_spec_div.decode_contents()
+        # Ensure proper section formatting
+        if not input_spec_div.find('div', class_='section-title'):
+            formatted_input_spec = f"""
+            <div class="input-specification">
+                <div class="section-title">Input</div>
+                <div>{content}</div>
+            </div>
+            """
+            input_spec_div.replace_with(bs4.BeautifulSoup(formatted_input_spec, "html.parser"))
+
+    output_spec_divs = bs.find_all('div', class_='output-specification')
+    for output_spec_div in output_spec_divs:
+        content = output_spec_div.decode_contents()
+        # Ensure proper section formatting
+        if not output_spec_div.find('div', class_='section-title'):
+            formatted_output_spec = f"""
+            <div class="output-specification">
+                <div class="section-title">Output</div>
+                <div>{content}</div>
+            </div>
+            """
+            output_spec_div.replace_with(bs4.BeautifulSoup(formatted_output_spec, "html.parser"))
 
     # Handle note sections to match 4A style
     note_divs = bs.find_all('div', class_='note')
@@ -609,23 +668,36 @@ def build_pdf_from_html(html: str, output_dir: str, file_name: str, mode: Mode, 
 
             /* Code/pre blocks with better styling */
             pre {{
-                background-color: #f8f8f8;
-                border: 1px solid #e1e1e1;
-                border-radius: 4px;
-                padding: 10px;
+                background-color: #f5f5f5;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+                padding: 12px;
                 white-space: pre-wrap;
-                font-family: 'Source Code Pro', 'Courier New', monospace;
-                font-size: 14px;
-                line-height: 1.4;
+                word-wrap: break-word;
+                font-family: 'Source Code Pro', 'Consolas', 'Monaco', 'Courier New', monospace;
+                font-size: 13px;
+                line-height: 1.5;
                 overflow-x: auto;
+                margin: 8px 0;
             }}
-            
+
             /* Fix Codeforces sample test formatting */
             .sample-test pre {{
-                margin: 0.5em 0;
-                padding: 0.5em;
-                background-color: #f0f0f0;
-                border: 1px solid #ccc;
+                margin: 6px 0;
+                padding: 8px 10px;
+                background-color: #f8f8f8;
+                border: 1px solid #d1d1d1;
+                font-size: 13px;
+                line-height: 1.4;
+            }}
+
+            /* Code elements within text */
+            code {{
+                background-color: #f4f4f4;
+                padding: 2px 5px;
+                border-radius: 3px;
+                font-family: 'Source Code Pro', 'Consolas', monospace;
+                font-size: 13px;
             }}
 
             /* Notes section */
@@ -643,28 +715,49 @@ def build_pdf_from_html(html: str, output_dir: str, file_name: str, mode: Mode, 
 
             /* Examples with better border and spacing */
             .example {{
-                margin-bottom: 20px;
-                padding: 5px;
+                margin-bottom: 15px;
+                padding: 0;
                 border-radius: 4px;
             }}
-            
+
             /* Sample tests container */
             .sample-test {{
-                margin-top: 25px;
-                margin-bottom: 30px;
+                margin-top: 20px;
+                margin-bottom: 25px;
             }}
-            
+
             /* Improved table-like layout for examples */
             .example {{
                 display: flex;
                 flex-wrap: wrap;
-                gap: 20px;
-                margin-bottom: 20px;
+                gap: 15px;
+                margin-bottom: 15px;
+                padding: 10px;
+                background-color: #fafafa;
+                border: 1px solid #e8e8e8;
+                border-radius: 4px;
             }}
-            
+
             .example .input, .example .output {{
                 flex: 1;
                 min-width: 45%;
+            }}
+
+            /* Paragraphs and general text spacing */
+            p {{
+                margin: 10px 0;
+                line-height: 1.6;
+            }}
+
+            /* Lists */
+            ul, ol {{
+                margin: 10px 0;
+                padding-left: 25px;
+            }}
+
+            li {{
+                margin: 5px 0;
+                line-height: 1.5;
             }}
             
             /* Difficulty badge styling */
@@ -681,29 +774,42 @@ def build_pdf_from_html(html: str, output_dir: str, file_name: str, mode: Mode, 
             }}
             
             /* Math formatting */
-            .math-inline, .math-display {{
+            .math-inline {{
                 font-style: italic;
+                font-family: 'Times New Roman', serif;
             }}
-            
+
             .math-display {{
                 display: block;
                 text-align: center;
                 margin: 15px 0;
+                font-style: italic;
+                font-family: 'Times New Roman', serif;
+                font-size: 16px;
             }}
-            
-            /* Add styling for the fraction display */
+
+            .math-notation {{
+                font-style: italic;
+                font-family: 'Times New Roman', serif;
+            }}
+
+            /* Fraction display */
             .fraction {{
-                display: inline-block;
-                vertical-align: middle;
-                text-align: center;
+                display: inline;
+                font-style: italic;
             }}
-            
-            .numerator, .denominator {{
-                display: block;
+
+            /* Subscript and superscript styling */
+            sub, sup {{
+                font-size: 0.8em;
             }}
-            
-            .numerator {{
-                border-bottom: 1px solid #000;
+
+            sub {{
+                vertical-align: sub;
+            }}
+
+            sup {{
+                vertical-align: super;
             }}
         </style>
     </head>
